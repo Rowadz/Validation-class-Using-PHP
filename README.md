@@ -1,4 +1,4 @@
-### Simple Validation class using PHP
+# Simple Validation class using PHP
 
 [post](http://therealrowad.blogspot.com/2018/06/building-simple-validation-class-using.html)
 

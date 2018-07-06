@@ -1,24 +1,11 @@
-### Simple Validation class using PHP
-
-[post](http://therealrowad.blogspot.com/2018/06/building-simple-validation-class-using.html)
-
-### How to use 
-![Final result](images/finalResult.png)
-### Usage
-![useage](images/usage.png)
-
-## Validation class 
-### class definition and attributes
-```php
 <?php
+
 class validation{
     private $data; // we will store the rules passed from the object initialized
     private $errors; // here we will store all the errors
     private $type; // determine the global array 
     private $holder; // to get the values from the array passed in case we need to use them
-```
-### __Construct
-```php
+
     public function __construct($data, $type){
         $this->data = $data;
         // to change the global array 
@@ -48,9 +35,7 @@ class validation{
         }
         $this->extractRules($data);
     }
-```
-### extractRules method
-```php
+    
     // this function extract the rules and start the validate process based on each rule
     private function extractRules($data){
         foreach ($data as $name => $rules) {
@@ -59,9 +44,8 @@ class validation{
             $this->startValidation($name, $theRules);
         }
     }
-```
-### startValidation method
-```php
+
+    
     private function startValidation($name, $theRules){ // variable name & the rules as array
         foreach ($theRules as $rule) {
             // strpos return the postion of sub-string in the rule
@@ -111,9 +95,8 @@ class validation{
             }
         }
     }
-```
-### required mthod
-```php
+
+    
     private function required($varName){
         if(! filter_has_var($this->type, $varName)){ // if $varName does exist in the global array
             $this->errors[$varName][] = "{$varName} is required";
@@ -123,29 +106,25 @@ class validation{
             if(empty($this->holder[$varName])) $this->errors[$varName][] = "{$varName} is empty";
         } 
     }
-```
-### isInteger method
-```php
+
     private function isInteger($varName){
         //  FALSE if the filter fails.
         //  NULL if the variable_name variable is not set. 
         $number = filter_input($this->type, $varName, FILTER_VALIDATE_INT);
         if($number === false || $number === null)
             $this->errors[$varName][] = "{$varName} is not an integer";
+        
     }
-```
-### isFloat mtheod
-```php
+
     private function isFloat($varName){
         //  FALSE if the filter fails.
         //  NULL if the variable_name variable is not set. 
         $number = filter_input($this->type, $varName, FILTER_VALIDATE_FLOAT);
         if($number === false || $number === null)
-            $this->errors[$varName][] = "{$varName} is not float";    
+            $this->errors[$varName][] = "{$varName} is not float";
+        
     }
-```
-### isEmail 
-```php
+    
     private function isEmail($varName){
         //  FALSE if the filter fails.
         //  NULL if the variable_name variable is not set. 
@@ -153,42 +132,33 @@ class validation{
         if($email === false || $email === null)
             $this->errors[$varName][] = "{$varName} is not an E-mail";   
     }
-```
-### min method
-```php
+
     private function min($varName, $number){
         if(strlen(filter_input($this->type, $varName)) < $number)
             $this->errors[$varName][] = "{$varName} is < than {$number}";
     }
-```
-### max method
-```php
+
     private function max($varName, $number){
         if(strlen(filter_input($this->type, $varName)) > $number)
             $this->errors[$varName][] = "{$varName} > than {$number}";
     }
-```
-### isDate method
-```php
+
     private function isDate($varName){
         
         if(!$this->validateDate($this->holder["$varName"])){
             $this->errors[$varName][] = "{$varName} is not a date";
         }
     }
-```
-### validateDate method
-```php
-// from the documentation
+
+    // from the documentation
     // you can add time to the format parameter
-    private function validateDate($date, $format = 'Y-m-d'){
+    private function validateDate($date, $format = 'Y-m-d')
+    {
         $d = DateTime::createFromFormat($format, $date);
         // compare a dates format
         return $d && $d->format($format) == $date;
     }
-```
-### unique method 
-```php
+
     // check if the data provided is in a table in the database
     // of course this will work better if the project have a database class the handle the errors and display them correctly
     public function unique($varName, $tableName){
@@ -219,33 +189,25 @@ class validation{
         /* close connection */
         $mysqli->close();
     }
-```
-### printErrors method
-```php
+
+
     // to print the errors in a good format
     private function printErrors(){
         print "<pre>";
         print_r($this->errors);
         print "</pre>";
     }
-```
-### __destruct  magic method
-```php
+
     public function __destruct(){
         $this->printErrors();
     }
-```
-### getErrors method
-```php 
+
     // to get all errors
     public function getErrors(){
         return $this->errors;
     }
-```
-### getSpecificError method
-```php
     // to get specific error
     public function getSpecificError($name){
         return isset($this->errors[$name]) ? $this->errors[$name] : null;
     }
-```
+}
